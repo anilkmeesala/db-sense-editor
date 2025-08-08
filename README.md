@@ -73,3 +73,7 @@ java -jar target/db-editor-1.0-SNAPSHOT-jar-with-dependencies.jar
 4. Use `Ctrl+Enter` or click "Run" to execute queries
 5. View results in the table below the editor
 6. Type 2-3 letters of SQL keywords to see auto-completion suggestions
+
+<img width="1080" height="734" alt="phase-2-1" src="https://github.com/user-attachments/assets/d89d0d43-7981-40a0-b6ee-8b551c722c79" />
+<img width="1084" height="744" alt="phase-2-2" src="https://github.com/user-attachments/assets/01238cf5-27f8-4b54-b9f9-0c3309f924aa" />
+

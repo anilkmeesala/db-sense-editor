@@ -31,27 +31,15 @@ public class DBExplorerPanel extends JPanel {
 
             // Database/product info at top
             String product = Objects.toString(meta.getDatabaseProductName(), "Database");
-            String url = Objects.toString(meta.getURL(), "");
-            rootNode.setUserObject(product + " (" + url + ")");
+            String currentCatalog = conn.getCatalog();
+            rootNode.setUserObject(product + " (" + currentCatalog + ")");
 
-            // Catalogs or current
-            ResultSet catalogs = meta.getCatalogs();
-            boolean hasCatalogs = false;
-            while (catalogs.next()) {
-                hasCatalogs = true;
-                String catalog = catalogs.getString(1);
-                DefaultMutableTreeNode catNode = new DefaultMutableTreeNode(catalog);
-                rootNode.add(catNode);
-                addTables(meta, catNode, catalog, null);
-            }
-            catalogs.close();
+            // Create Tables node
+            DefaultMutableTreeNode tablesNode = new DefaultMutableTreeNode("Tables");
+            rootNode.add(tablesNode);
 
-            if (!hasCatalogs) {
-                // Use schemas/tables without catalog
-                DefaultMutableTreeNode defaultNode = new DefaultMutableTreeNode("Tables");
-                rootNode.add(defaultNode);
-                addTables(meta, defaultNode, null, null);
-            }
+            // Add tables only from current catalog and schema
+            addTables(meta, tablesNode, currentCatalog, conn.getSchema());
         } catch (Exception ex) {
             DefaultMutableTreeNode err = new DefaultMutableTreeNode("Error: " + ex.getMessage());
             rootNode.add(err);

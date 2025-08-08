@@ -26,8 +26,13 @@ public class SQLEditorPanel extends JPanel {
         textArea.setMargin(new Insets(8, 10, 8, 10));
         textArea.setAntiAliasingEnabled(true);
         
-        // Apply custom color scheme for medium theme
-        applyCustomColors();
+        // Apply default theme
+        try {
+            Theme.load(getClass().getResourceAsStream(
+                "/org/fife/ui/rsyntaxtextarea/themes/default.xml")).apply(textArea);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
         // Debugging (can be removed later)
         textArea.addKeyListener(new KeyAdapter() {
@@ -49,53 +54,9 @@ public class SQLEditorPanel extends JPanel {
         }
     }
     
-    private void applyCustomColors() {
-        // Unified medium theme colors - same as container
-        Color bgColor = new Color(247, 249, 252);     // slightly tinted editor bg
-        Color fgColor = new Color(31, 41, 55);        // primary text
-        Color selectionColor = new Color(205, 227, 255);
-        Color currentLineColor = new Color(238, 242, 247);
-        
-        textArea.setBackground(bgColor);
-        textArea.setForeground(fgColor);
-        textArea.setCaretColor(new Color(51, 65, 85));
-        textArea.setSelectionColor(selectionColor);
-        textArea.setCurrentLineHighlightColor(currentLineColor);
-        
-        // Syntax highlighting colors with better contrast
-        org.fife.ui.rsyntaxtextarea.SyntaxScheme scheme = textArea.getSyntaxScheme();
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.RESERVED_WORD).foreground = new Color(30, 100, 200);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.RESERVED_WORD).font = new Font(Font.MONOSPACED, Font.BOLD, 14);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.LITERAL_STRING_DOUBLE_QUOTE).foreground = new Color(0, 128, 0);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.LITERAL_NUMBER_DECIMAL_INT).foreground = new Color(138, 43, 226);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.COMMENT_EOL).foreground = new Color(107, 114, 128);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.COMMENT_MULTILINE).foreground = new Color(107, 114, 128);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.OPERATOR).foreground = new Color(55, 65, 81);
-        textArea.setSyntaxScheme(scheme);
-    }
+    // Removed custom colors as we now use RSyntaxTextArea's built-in themes
     
-    private org.fife.ui.rsyntaxtextarea.SyntaxScheme createCustomSyntaxScheme() {
-        org.fife.ui.rsyntaxtextarea.SyntaxScheme scheme = textArea.getSyntaxScheme();
-        
-        // SQL keywords - blue
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.RESERVED_WORD).foreground = new Color(0, 100, 200);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.RESERVED_WORD).font = new Font(Font.MONOSPACED, Font.BOLD, 14);
-        
-        // Strings - green
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.LITERAL_STRING_DOUBLE_QUOTE).foreground = new Color(0, 150, 0);
-        
-        // Numbers - purple
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.LITERAL_NUMBER_DECIMAL_INT).foreground = new Color(150, 0, 150);
-        
-        // Comments - gray
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.COMMENT_EOL).foreground = new Color(128, 128, 128);
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.COMMENT_MULTILINE).foreground = new Color(128, 128, 128);
-        
-        // Operators - dark gray
-        scheme.getStyle(org.fife.ui.rsyntaxtextarea.TokenTypes.OPERATOR).foreground = new Color(80, 80, 80);
-        
-        return scheme;
-    }
+    
 
     public RSyntaxTextArea getTextArea() {
         return textArea;

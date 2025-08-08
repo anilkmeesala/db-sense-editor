@@ -5,7 +5,6 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
-import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.sql.SQLException;
@@ -16,11 +15,67 @@ public class DBEditorUI extends JFrame {
     private JButton runButton;
     private JLabel statusLabel;
 
+    private void setEditorTheme(String theme) {
+        RSyntaxTextArea textArea = editorPanel.getTextArea();
+        try {
+            switch (theme) {
+                case "Dark":
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(textArea);
+                    break;
+                case "Monokai":
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/monokai.xml")).apply(textArea);
+                    break;
+                case "Eclipse":
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/eclipse.xml")).apply(textArea);
+                    break;
+                case "VS Code":
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/vs.xml")).apply(textArea);
+                    break;
+                case "Solarized Light":
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/default-alt.xml")).apply(textArea);
+                    break;
+                case "Solarized Dark":
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/dark.xml")).apply(textArea);
+                    break;
+                default:
+                    org.fife.ui.rsyntaxtextarea.Theme.load(getClass().getResourceAsStream(
+                        "/org/fife/ui/rsyntaxtextarea/themes/default.xml")).apply(textArea);
+                    break;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            JOptionPane.showMessageDialog(this, 
+                "Error loading theme: " + e.getMessage(), 
+                "Theme Error", 
+                JOptionPane.ERROR_MESSAGE);
+        }
+    }
+
     public DBEditorUI() {
         setTitle("DB Editor");
         setSize(1100, 750);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
+
+        // Create menu bar
+        JMenuBar menuBar = new JMenuBar();
+        JMenu themesMenu = new JMenu("Themes");
+        String[] themes = {
+            "Default", "Dark", "Monokai", "Eclipse", "VS Code", "Solarized Light", "Solarized Dark"
+        };
+        for (String theme : themes) {
+            JMenuItem themeItem = new JMenuItem(theme);
+            themeItem.addActionListener(e -> setEditorTheme(theme));
+            themesMenu.add(themeItem);
+        }
+        menuBar.add(themesMenu);
+        setJMenuBar(menuBar);
 
         // Top toolbar
         JToolBar toolBar = new JToolBar();
